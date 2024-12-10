@@ -16,7 +16,9 @@ export default function AddUser() {
       }).then((res) => res.json());
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      new Promise((res) => setTimeout(res, 100)).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["users"] });
+      });
     },
   });
 
@@ -39,10 +41,10 @@ export default function AddUser() {
   };
 
   return (
-    <div className="h-full bg-rose-500 rounded-md shadow-xl shadow-rose-500/50">
+    <div className="h-full bg-rose-500 rounded-md shadow-xl shadow-rose-500/50 p-4">
       <form
         onSubmit={(e) => onSubmit(e)}
-        className="flex flex-col gap-4 p-2 text-neutral-200"
+        className="flex flex-col gap-4 text-neutral-200"
         autoComplete="off"
       >
         <input

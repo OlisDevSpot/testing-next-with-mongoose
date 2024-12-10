@@ -1,9 +1,11 @@
 import { IUser } from "@/models/user.model";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Users() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["users"],
@@ -37,12 +39,21 @@ export default function Users() {
       {users.users.map((user: IUser) => (
         <div
           key={String(user._id)}
-          className="p-4 border rounded-md cursor-pointer hover:bg-rose-400 transition"
-          onClick={() => deleteUser.mutate(String(user._id))}
+          className="p-4 border rounded-md hover:bg-rose-400 transition flex justify-between items-center cursor-pointer"
+          onClick={() => router.push(`/user/${user._id}`)}
         >
           <p className="text-lg font-bold">
             {user.firstName} {user.lastName}
           </p>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteUser.mutate(String(user._id));
+            }}
+            className="w-8 h-8 rounded-full transition cursor-pointer bg-neutral-950 text-neutral-300 hover:bg-neutral-700 flex items-center justify-center"
+          >
+            <Trash size={18} />
+          </div>
         </div>
       ))}
     </div>
